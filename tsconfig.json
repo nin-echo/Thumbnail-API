@@ -4,5 +4,9 @@
     "outDir": "dist",
     "sourceMap": true
   },
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*.ts"],
+  "ts-node": {
+    "files": true
+  },
+  "typeRoots": ["./src/types"]
 }
