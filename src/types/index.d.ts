@@ -11,6 +11,9 @@ import { Kysely } from 'kysely'
 import { Database } from '../database/types'
 import { JobStatus } from '../database/models'
 
+/**
+ * @description Extends the FastifyInstance interface to include the data sources
+ */
 declare module 'fastify' {
   type UsersDataSource = {
     findUser: (id: string) => Promise<QueryResult<any>>
