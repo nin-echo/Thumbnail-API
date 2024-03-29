@@ -4,6 +4,7 @@ import fs from 'fs'
 import { pipeline } from 'stream'
 import { FastifyPluginAsync } from 'fastify'
 import { ThumbnailParamsSchemaType, ThumbnailSchema } from './schemas/thumbnail'
+import { UPLOAD_IMAGE_PATH_PREFIX } from './constants'
 
 const pump = util.promisify(pipeline)
 
@@ -41,7 +42,11 @@ const thumbnails: FastifyPluginAsync = async (fastify, _opts) => {
       throw fastify.httpErrors.badRequest()
     }
 
-    const fileName = `${Date.now()}-${data.filename}`
+    if (!fs.existsSync(UPLOAD_IMAGE_PATH_PREFIX)) {
+      fs.mkdirSync(UPLOAD_IMAGE_PATH_PREFIX, { recursive: true })
+    }
+
+    const fileName = UPLOAD_IMAGE_PATH_PREFIX + `${Date.now()}-${data.filename}`
     await pump(data.file, fs.createWriteStream(fileName))
 
     if (data.file.truncated) {
