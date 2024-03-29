@@ -1,13 +1,10 @@
-import { ColumnType, Generated, Insertable, JSONColumnType, Selectable, Updateable } from 'kysely'
+import { ColumnType, Generated, Insertable, Selectable, Updateable } from 'kysely'
 
 export interface ThumbnailTable {
   id: Generated<string>
-  userId: ColumnType<string>
-  jobId: ColumnType<string>
-  metadata: JSONColumnType<{
-    name: string | null
-    data: string
-  }>
+  job_id: ColumnType<string>
+  name: ColumnType<string | null>
+  metadata: ColumnType<Buffer>
 }
 
 type Thumbnail = Selectable<ThumbnailTable>

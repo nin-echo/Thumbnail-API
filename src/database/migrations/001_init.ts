@@ -24,6 +24,7 @@ export async function up(db: Kysely<Database>): Promise<void> {
     .createTable('thumbnails')
     .addColumn('id', 'serial', column => column.primaryKey())
     .addColumn('job_id', 'integer', column => column.references('jobs.id').onDelete('cascade').notNull())
+    .addColumn('name', 'text')
     .addColumn('metadata', 'bytea', column => column.notNull())
     .execute()
 }
