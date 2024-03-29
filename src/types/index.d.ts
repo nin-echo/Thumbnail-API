@@ -5,6 +5,7 @@ import {
   RawServerBase,
   RawServerDefault,
 } from 'fastify'
+import { Kafka } from 'kafkajs'
 
 import { EnvSchemaType } from '../schemas/dotenv'
 import { Kysely } from 'kysely'
@@ -31,7 +32,7 @@ declare module 'fastify' {
   }
 
   type ThumbnailsDataSource = {
-    saveThumbnail: (thumbnail: Buffer) => Promise<QueryResult<any>>
+    saveThumbnail: (jobId: string, thumbnail: Buffer) => Promise<QueryResult<any>>
     findThumbnailByJobId: (jobId: string) => Promise<QueryResult<any>>
     findThumbnailByUserId: (userId: string) => Promise<QueryResult<any>>
   }
@@ -43,6 +44,7 @@ declare module 'fastify' {
     Logger = FastifyBaseLogger,
   > {
     kysely: Kysely<Database>
+    kafka: Kafka
     config: EnvSchemaType
     usersDataSource: UsersDataSource
     userJobDataSource: UserJobsDataSource

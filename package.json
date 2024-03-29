@@ -64,6 +64,7 @@
     "fastify": "^4.26.1",
     "fastify-cli": "^6.1.1",
     "fastify-plugin": "^4.0.0",
+    "kafkajs": "^2.2.4",
     "kysely": "^0.27.3",
     "pg": "^8.11.3",
     "sharp": "^0.33.3"

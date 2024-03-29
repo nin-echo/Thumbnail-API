@@ -1,28 +1,14 @@
 import fp from 'fastify-plugin'
-import { exit } from 'process'
 
 export default fp(
   async (fastify, _opts) => {
     fastify.decorate('thumbnailsDataSource', {
-      saveThumbnail: async (thumbnail: Buffer) => {
+      saveThumbnail: async (jobId: string, thumbnail: Buffer) => {
         try {
-          const newJob = await fastify.kysely
-            .insertInto('jobs')
-            .values({
-              status: 'processing',
-            })
-            .returningAll()
-            .executeTakeFirst()
-
-          if (!newJob) {
-            fastify.log.error('Failed to create a new job')
-            exit(1)
-          }
-
           fastify.kysely
             .insertInto('thumbnails')
             .values({
-              job_id: newJob.id,
+              job_id: jobId,
               metadata: thumbnail,
             })
             .execute()

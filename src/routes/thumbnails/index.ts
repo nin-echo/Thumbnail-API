@@ -1,10 +1,10 @@
 import util from 'util'
-import sharp from 'sharp'
 import fs from 'fs'
 import { pipeline } from 'stream'
 import { FastifyPluginAsync } from 'fastify'
 import { ThumbnailParamsSchemaType, ThumbnailSchema } from './schemas/thumbnail'
 import { UPLOAD_IMAGE_PATH_PREFIX } from './constants'
+import { randomUUID } from 'crypto'
 
 const pump = util.promisify(pipeline)
 
@@ -36,7 +36,7 @@ const thumbnails: FastifyPluginAsync = async (fastify, _opts) => {
    *
    * @description Upload an image and generate a thumbnail
    */
-  fastify.post('/upload', async function (request, reply) {
+  fastify.post('/upload', async function (request, reply): Promise<void> {
     const data = await request.file()
     if (!data) {
       throw fastify.httpErrors.badRequest()
@@ -53,14 +53,24 @@ const thumbnails: FastifyPluginAsync = async (fastify, _opts) => {
       reply.send(fastify.multipartErrors.FilesLimitError())
     }
 
-    const thumnailImg = await sharp(fileName)
-      .resize(100, 100, {
-        fit: 'contain',
-      })
-      .png()
-      .toBuffer()
+    fastify.log.info('File saved to local disk storage: ' + fileName)
 
-    await fastify.thumbnailsDataSource.saveThumbnail(thumnailImg)
+    const kafkaProducer = fastify.kafka.producer()
+    await kafkaProducer.connect()
+    const jobId = randomUUID()
+    await kafkaProducer.send({
+      topic: fastify.config.KAFKA_TOPIC,
+      messages: [{ key: jobId, value: fileName }],
+    })
+    await kafkaProducer.disconnect()
+    await fastify.kysely
+      .insertInto('jobs')
+      .values({
+        id: jobId,
+        status: 'processing',
+      })
+      .returningAll()
+      .executeTakeFirstOrThrow()
 
     await reply.send({ success: true })
   })
