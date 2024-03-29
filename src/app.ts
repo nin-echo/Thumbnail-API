@@ -43,14 +43,6 @@ const app: FastifyPluginAsync<AppOptions> = async (fastify, opts): Promise<void>
     fastify.log.info('CURRENT ROUTES:')
     fastify.log.info(fastify.printRoutes())
   }
-
-  fastify.addHook('onClose', async _fastify => {
-    fastify.log.info('Running onClose hook...')
-    if (fastify.kysely) {
-      await fastify.kysely.destroy()
-    }
-    fastify.log.info('Running onClose hook complete')
-  })
 }
 
 export default app

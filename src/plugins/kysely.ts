@@ -45,6 +45,14 @@ export default fp(
 
       fastify.decorate('kysely', connection)
     }
+
+    fastify.addHook('onClose', async () => {
+      if (fastify.kysely) {
+        fastify.log.info('Running onClose hook: kysely destroy()')
+        await fastify.kysely.destroy()
+        fastify.log.info('onClose hook: kysely destroyed is done!')
+      }
+    })
   },
   {
     name: 'kysely',
