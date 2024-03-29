@@ -8,6 +8,11 @@ import { ThumbnailParamsSchemaType, ThumbnailSchema } from './schemas/thumbnail'
 const pump = util.promisify(pipeline)
 
 const thumbnails: FastifyPluginAsync = async (fastify, _opts) => {
+  /**
+   * GET /thumbnails/{jobId}
+   *
+   * @description Get a thumbnail by job id
+   */
   fastify.get<{ Params: ThumbnailParamsSchemaType }>(
     '/:jobId',
     {
@@ -25,6 +30,11 @@ const thumbnails: FastifyPluginAsync = async (fastify, _opts) => {
     },
   )
 
+  /**
+   * POST /thumbnails/upload
+   *
+   * @description Upload an image and generate a thumbnail
+   */
   fastify.post('/upload', async function (request, reply) {
     const data = await request.file()
     if (!data) {
