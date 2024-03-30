@@ -5,12 +5,16 @@ import { Database } from '../database/types'
 import * as path from 'path'
 import { promises as fs } from 'fs'
 
-export default fp(
-  async (fastify, _opts) => {
+interface KyselyPluginOptions {
+  connectionString: string
+}
+
+export default fp<KyselyPluginOptions>(
+  async (fastify, opts) => {
     if (!fastify.kysely) {
       const dialect = new PostgresDialect({
         pool: new Pool({
-          connectionString: fastify.config.DATABASE_URL,
+          connectionString: opts.connectionString || fastify.config.DATABASE_URL,
         }),
       })
 

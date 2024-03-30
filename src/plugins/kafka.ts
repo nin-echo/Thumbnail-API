@@ -3,16 +3,25 @@ import fs from 'fs'
 import { Kafka } from 'kafkajs'
 import sharp from 'sharp'
 
-export default fp((fastify, _opts, done) => {
+interface KafkaPluginOptions {
+  clientId: string
+  brokers: string
+  topic: string
+  groupId: string
+}
+
+export default fp<KafkaPluginOptions>((fastify, opts, done) => {
+  const { clientId, brokers, topic, groupId } = opts
+
   const kafka = new Kafka({
-    clientId: fastify.config.KAFKA_CLIENT_ID,
-    brokers: [fastify.config.KAFKA_BROKERS],
+    clientId: clientId || fastify.config.KAFKA_CLIENT_ID,
+    brokers: [brokers || fastify.config.KAFKA_BROKERS],
   })
 
   // kafka consumer
-  const consumer = kafka.consumer({ groupId: fastify.config.KAFKA_GROUP_ID })
+  const consumer = kafka.consumer({ groupId: groupId || fastify.config.KAFKA_GROUP_ID })
   consumer.connect().then(async () => {
-    await consumer.subscribe({ topic: fastify.config.KAFKA_TOPIC })
+    await consumer.subscribe({ topic: topic || fastify.config.KAFKA_TOPIC })
     consumer.run({
       eachMessage: async ({ topic, partition, message }) => {
         const jobId = message.key?.toString()
@@ -53,7 +62,7 @@ export default fp((fastify, _opts, done) => {
       const producer = kafka.producer()
       await producer.connect()
       await producer.send({
-        topic: fastify.config.KAFKA_TOPIC,
+        topic: topic || fastify.config.KAFKA_TOPIC,
         messages: [{ key: jobId, value: imgPath }],
       })
       await producer.disconnect()
