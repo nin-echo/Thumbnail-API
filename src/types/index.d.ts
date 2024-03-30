@@ -21,15 +21,6 @@ declare module 'fastify' {
     produceThumbnail: (jobId: string, imgPath: string) => Promise<void>
   }
 
-  type UsersDataSource = {
-    findUser: (id: string) => Promise<QueryResult<any>>
-  }
-
-  type UserJobsDataSource = {
-    linkJobToUser: (userId: string, jobId: string) => Promise<QueryResult<any>>
-    findJobsByUserId: (userId: string) => Promise<QueryResult<any>>
-  }
-
   type JobsDataSource = {
     createJob: (jobId: string) => Promise<QueryResult<any>>
     updateJobStatus: (jobId: string, status: JobStatus) => Promise<QueryResult<any>>
@@ -37,9 +28,8 @@ declare module 'fastify' {
   }
 
   type ThumbnailsDataSource = {
-    saveThumbnail: (jobId: string, thumbnail: Buffer) => Promise<QueryResult<any>>
+    saveThumbnail: (jobId: string, name: string, thumbnail: Buffer) => Promise<QueryResult<any>>
     findThumbnailByJobId: (jobId: string) => Promise<QueryResult<any>>
-    findThumbnailByUserId: (userId: string) => Promise<QueryResult<any>>
   }
 
   export interface FastifyInstance<
@@ -51,8 +41,6 @@ declare module 'fastify' {
     kysely: Kysely<Database>
     kafKaService: KafKaService
     config: EnvSchemaType
-    usersDataSource: UsersDataSource
-    userJobDataSource: UserJobsDataSource
     jobsDataSource: JobsDataSource
     thumbnailsDataSource: ThumbnailsDataSource
   }

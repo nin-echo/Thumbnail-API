@@ -3,25 +3,9 @@ import { Database } from '../types'
 
 export async function up(db: Kysely<Database>): Promise<void> {
   await db.schema
-    .createTable('users')
-    .addColumn('id', 'uuid', column => column.primaryKey().defaultTo(sql`gen_random_uuid()`))
-    .addColumn('name', 'text', column => column.notNull())
-    .addColumn('created_at', 'timestamp', column => column.notNull().defaultTo(sql`now()`))
-    .addColumn('updated_at', 'timestamp', column => column.notNull().defaultTo(sql`now()`))
-    .execute()
-
-  await db.schema
     .createTable('jobs')
     .addColumn('id', 'uuid', column => column.primaryKey().defaultTo(sql`gen_random_uuid()`))
     .addColumn('status', 'text', column => column.notNull().defaultTo('processing'))
-    .addColumn('created_at', 'timestamp', column => column.notNull().defaultTo(sql`now()`))
-    .addColumn('updated_at', 'timestamp', column => column.notNull().defaultTo(sql`now()`))
-    .execute()
-
-  await db.schema
-    .createTable('user_jobs')
-    .addColumn('user_id', 'uuid', column => column.references('users.id').onDelete('cascade').notNull())
-    .addColumn('job_id', 'uuid', column => column.references('jobs.id').onDelete('cascade').notNull())
     .addColumn('created_at', 'timestamp', column => column.notNull().defaultTo(sql`now()`))
     .addColumn('updated_at', 'timestamp', column => column.notNull().defaultTo(sql`now()`))
     .execute()
@@ -39,7 +23,5 @@ export async function up(db: Kysely<Database>): Promise<void> {
 
 export async function down(db: Kysely<Database>): Promise<void> {
   await db.schema.dropTable('thumbnails').execute()
-  await db.schema.dropTable('user_jobs').execute()
   await db.schema.dropTable('jobs').execute()
-  await db.schema.dropTable('users').execute()
 }

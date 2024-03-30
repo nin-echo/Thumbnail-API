@@ -1,4 +1,5 @@
 import fp from 'fastify-plugin'
+import fs from 'fs'
 import { Kafka } from 'kafkajs'
 import sharp from 'sharp'
 
@@ -26,8 +27,18 @@ export default fp((fastify, _opts, done) => {
               })
               .webp()
               .toBuffer()
-            await fastify.thumbnailsDataSource.saveThumbnail(jobId, generatedThumbnail)
+
+            const fileName = imgPath.split('/').pop()
+            await fastify.thumbnailsDataSource.saveThumbnail(
+              jobId,
+              fileName || `thumbnail-${jobId}`,
+              generatedThumbnail,
+            )
             await fastify.jobsDataSource.updateJobStatus(jobId, 'success')
+
+            fs.unlink(imgPath, err => {
+              fastify.log.warn(`[fs] Failed to delete image from tmp storage: ${err}`)
+            })
 
             fastify.log.info('[Kafka] Thumbnail generated and saved to database')
           } catch (error) {

@@ -59,7 +59,7 @@ const thumbnails: FastifyPluginAsync = async (fastify, _opts) => {
     await fastify.jobsDataSource.createJob(jobId)
     await fastify.kafKaService.produceThumbnail(jobId, fileName)
 
-    await reply.send({ success: true })
+    await reply.send({ jobId })
   })
 }
 
