@@ -1,6 +1,6 @@
 import fp from 'fastify-plugin'
 import fs from 'fs'
-import { Kafka } from 'kafkajs'
+import { Kafka, logLevel } from 'kafkajs'
 
 interface KafkaPluginOptions {
   clientId: string
@@ -15,6 +15,7 @@ export default fp<KafkaPluginOptions>((fastify, opts, done) => {
   const kafka = new Kafka({
     clientId: clientId || fastify.config.KAFKA_CLIENT_ID,
     brokers: [brokers || fastify.config.KAFKA_BROKERS],
+    logLevel: logLevel.ERROR,
   })
 
   // kafka consumer

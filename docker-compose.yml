@@ -1,8 +1,10 @@
+version: '3.8'
+
 services:
   db:
     image: postgres:latest
     container_name: postgres
-    restart: always
+    restart: unless-stopped
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
@@ -41,6 +43,19 @@ services:
       KAFKA_CREATE_TOPICS: 'thumbnail-jobs:1:1'
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+
+  server:
+    depends_on:
+      - db
+      - db-test
+      - zookeeper
+      - kafka
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - 3000:3000
 
 volumes:
   pgdata:
