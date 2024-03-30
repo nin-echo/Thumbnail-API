@@ -55,22 +55,9 @@ const thumbnails: FastifyPluginAsync = async (fastify, _opts) => {
 
     fastify.log.info('File saved to local disk storage: ' + fileName)
 
-    const kafkaProducer = fastify.kafka.producer()
-    await kafkaProducer.connect()
     const jobId = randomUUID()
-    await kafkaProducer.send({
-      topic: fastify.config.KAFKA_TOPIC,
-      messages: [{ key: jobId, value: fileName }],
-    })
-    await kafkaProducer.disconnect()
-    await fastify.kysely
-      .insertInto('jobs')
-      .values({
-        id: jobId,
-        status: 'processing',
-      })
-      .returningAll()
-      .executeTakeFirstOrThrow()
+    await fastify.jobsDataSource.createJob(jobId)
+    await fastify.kafKaService.produceThumbnail(jobId, fileName)
 
     await reply.send({ success: true })
   })

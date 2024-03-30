@@ -3,6 +3,8 @@ import { ColumnType, Generated, Insertable, Selectable, Updateable } from 'kysel
 export interface UserTable {
   id: Generated<string>
   name: ColumnType<string>
+  created_at: Generated<Date>
+  updated_at: Generated<Date>
 }
 
 type User = Selectable<UserTable>

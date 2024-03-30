@@ -5,6 +5,8 @@ export interface ThumbnailTable {
   job_id: ColumnType<string>
   name: ColumnType<string | null>
   metadata: ColumnType<Buffer>
+  created_at: Generated<Date>
+  updated_at: Generated<Date>
 }
 
 type Thumbnail = Selectable<ThumbnailTable>

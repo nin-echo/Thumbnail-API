@@ -16,6 +16,11 @@ import { JobStatus } from '../database/models'
  * @description Extends the FastifyInstance interface to include the data sources
  */
 declare module 'fastify' {
+  type KafKaService = {
+    instance: Kafka
+    produceThumbnail: (jobId: string, imgPath: string) => Promise<void>
+  }
+
   type UsersDataSource = {
     findUser: (id: string) => Promise<QueryResult<any>>
   }
@@ -44,7 +49,7 @@ declare module 'fastify' {
     Logger = FastifyBaseLogger,
   > {
     kysely: Kysely<Database>
-    kafka: Kafka
+    kafKaService: KafKaService
     config: EnvSchemaType
     usersDataSource: UsersDataSource
     userJobDataSource: UserJobsDataSource
