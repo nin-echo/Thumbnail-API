@@ -12,6 +12,17 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
+  db-test:
+    image: postgres:latest
+    container_name: postgres-test
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: postgres-test
+    ports:
+      - 5433:5432
+
   zookeeper:
     image: wurstmeister/zookeeper:latest
     ports:

@@ -1,10 +1,24 @@
 import fp from 'fastify-plugin'
+import sharp from 'sharp'
 
 export default fp(async (fastify, _opts) => {
-  fastify.decorate('thumbnailsDataSource', {
+  fastify.decorate('thumbnailService', {
+    generateThumbnail: async (imagePath: string): Promise<Buffer | undefined> => {
+      try {
+        return sharp(imagePath)
+          .resize(100, 100, {
+            fit: 'contain',
+          })
+          .webp()
+          .toBuffer()
+      } catch (error) {
+        fastify.log.error('[sharp] Failed to generate thumbnail:' + error)
+        return undefined
+      }
+    },
     saveThumbnail: async (jobId: string, name: string, thumbnail: Buffer) => {
       try {
-        fastify.kysely
+        return fastify.kysely
           .insertInto('thumbnails')
           .values({
             job_id: jobId,

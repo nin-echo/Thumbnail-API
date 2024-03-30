@@ -5,7 +5,7 @@ export default fp(async (fastify, _opts) => {
   fastify.decorate('jobsDataSource', {
     createJob: async (jobId: string) => {
       try {
-        fastify.kysely
+        return fastify.kysely
           .insertInto('jobs')
           .values({
             id: jobId,
@@ -19,7 +19,7 @@ export default fp(async (fastify, _opts) => {
     },
     updateJobStatus: async (jobId: string, status: JobStatus) => {
       try {
-        fastify.kysely
+        return fastify.kysely
           .updateTable('jobs')
           .set({
             status,

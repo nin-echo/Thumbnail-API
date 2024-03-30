@@ -28,7 +28,8 @@ declare module 'fastify' {
     getAllJobs: () => Promise<QueryResult<any>>
   }
 
-  type ThumbnailsDataSource = {
+  type ThumbnailService = {
+    generateThumbnail: (imgPath: string) => Promise<Buffer | undefined>
     saveThumbnail: (jobId: string, name: string, thumbnail: Buffer) => Promise<QueryResult<any>>
     findThumbnailByJobId: (jobId: string) => Promise<QueryResult<any>>
   }
@@ -43,6 +44,6 @@ declare module 'fastify' {
     kafKaService: KafKaService
     config: EnvSchemaType
     jobsDataSource: JobsDataSource
-    thumbnailsDataSource: ThumbnailsDataSource
+    thumbnailService: ThumbnailService
   }
 }

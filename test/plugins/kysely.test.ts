@@ -1,13 +1,14 @@
 import test from 'ava'
 import Fastify, { FastifyInstance } from 'fastify'
 import kysely from '../../src/plugins/kysely'
+import { DB_URL } from '../constants'
 
 let app: FastifyInstance
 
 test.before(async () => {
   app = Fastify()
   await app.register(kysely, {
-    connectionString: 'postgres://postgres:password@localhost:5432/postgres',
+    connectionString: DB_URL,
   })
 
   await app.ready()
@@ -23,7 +24,7 @@ test('registers kysely plugin', async t => {
 })
 
 test('kysely can be destroyed', async t => {
-  t.notThrows(async () => {
+  await t.notThrowsAsync(async () => {
     await app.kysely.destroy()
   })
 })

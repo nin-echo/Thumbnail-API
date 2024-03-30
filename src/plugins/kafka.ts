@@ -1,7 +1,6 @@
 import fp from 'fastify-plugin'
 import fs from 'fs'
 import { Kafka } from 'kafkajs'
-import sharp from 'sharp'
 
 interface KafkaPluginOptions {
   clientId: string
@@ -30,24 +29,16 @@ export default fp<KafkaPluginOptions>((fastify, opts, done) => {
           fastify.log.info(`[Kafka] Received message: [topic: ${topic}] [partion: ${partition}] ${imgPath}`)
 
           try {
-            const generatedThumbnail = await sharp(imgPath)
-              .resize(100, 100, {
-                fit: 'contain',
-              })
-              .webp()
-              .toBuffer()
+            const generatedThumbnail = await fastify.thumbnailService.generateThumbnail(imgPath)
+            if (generatedThumbnail) {
+              const fileName = imgPath.split('/').pop()
+              await fastify.thumbnailService.saveThumbnail(jobId, fileName || `thumbnail-${jobId}`, generatedThumbnail)
+              await fastify.jobsDataSource.updateJobStatus(jobId, 'success')
 
-            const fileName = imgPath.split('/').pop()
-            await fastify.thumbnailsDataSource.saveThumbnail(
-              jobId,
-              fileName || `thumbnail-${jobId}`,
-              generatedThumbnail,
-            )
-            await fastify.jobsDataSource.updateJobStatus(jobId, 'success')
+              fs.unlink(imgPath, _ => {})
 
-            fs.unlink(imgPath, _ => {})
-
-            fastify.log.info('[Kafka] Thumbnail generated and saved to database')
+              fastify.log.info('[Kafka] Thumbnail generated and saved to database')
+            }
           } catch (error) {
             fastify.log.error('[Kafka] Failed to generate thumbnail' + error)
           }

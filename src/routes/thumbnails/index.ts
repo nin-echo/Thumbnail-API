@@ -24,7 +24,7 @@ const thumbnails: FastifyPluginAsync = async (fastify, _opts) => {
       },
     },
     async function (request, reply) {
-      const thumbnail = await fastify.thumbnailsDataSource.findThumbnailByJobId(request.params.jobId)
+      const thumbnail = await fastify.thumbnailService.findThumbnailByJobId(request.params.jobId)
       const thumbnailBuffer = thumbnail.metadata
       const thumbnailImage = Buffer.from(thumbnailBuffer)
       reply.status(200).send(thumbnailImage)
