@@ -48,9 +48,11 @@ const app: FastifyPluginAsync<AppOptions> = async (fastify, opts): Promise<void>
 
   fastify.addHook('onClose', async () => {
     fastify.log.info('Closing Fastify server')
-    fastify.kysely?.destroy()
-    fastify.kafKaService?.instance?.producer()?.disconnect()
-    fastify.kafKaService.instance?.consumer({ groupId: fastify.config.KAFKA_GROUP_ID })?.disconnect()
+    await Promise.all([
+      fastify.kysely?.destroy(),
+      fastify.kafKaService?.instance?.producer()?.disconnect(),
+      fastify.kafKaService.instance?.consumer({ groupId: fastify.config.KAFKA_GROUP_ID })?.disconnect(),
+    ])
     fastify.log.info('Fastify server closed')
   })
 }

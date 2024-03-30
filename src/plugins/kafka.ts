@@ -36,9 +36,7 @@ export default fp((fastify, _opts, done) => {
             )
             await fastify.jobsDataSource.updateJobStatus(jobId, 'success')
 
-            fs.unlink(imgPath, err => {
-              fastify.log.warn(`[fs] Failed to delete image from tmp storage: ${err}`)
-            })
+            fs.unlink(imgPath, _ => {})
 
             fastify.log.info('[Kafka] Thumbnail generated and saved to database')
           } catch (error) {
