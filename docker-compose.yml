@@ -36,7 +36,7 @@ services:
     links:
       - zookeeper
     environment:
-      KAFKA_ADVERTISED_HOST_NAME: ${HOST_IP}
+      KAFKA_ADVERTISED_HOST_NAME: kafka
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
       KAFKA_DELETE_TOPIC_ENABLE: 'true'
@@ -54,6 +54,9 @@ services:
       context: .
       dockerfile: Dockerfile
     restart: unless-stopped
+    environment:
+      - DATABASE_URL=postgres://postgres:password@db:5432/postgres
+      - KAFKA_BROKERS=kafka:9092
     ports:
       - 3000:3000
 
