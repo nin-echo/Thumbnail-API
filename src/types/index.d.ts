@@ -25,6 +25,7 @@ declare module 'fastify' {
     createJob: (jobId: string) => Promise<QueryResult<any>>
     updateJobStatus: (jobId: string, status: JobStatus) => Promise<QueryResult<any>>
     getJob: (jobId: string) => Promise<QueryResult<any>>
+    getAllJobs: () => Promise<QueryResult<any>>
   }
 
   type ThumbnailsDataSource = {

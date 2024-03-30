@@ -45,5 +45,8 @@ export default fp(async (fastify, _opts) => {
         fastify.log.error('[keysely] Failed to get job in database: ' + error)
       }
     },
+    getAllJobs: async () => {
+      return fastify.kysely.selectFrom('jobs').selectAll().execute()
+    },
   })
 })
