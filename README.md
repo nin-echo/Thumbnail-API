@@ -65,7 +65,11 @@ built-in assertions
 
 ## Install Instructions
 
-## Files Structure
+1. Docker (**Recommend**) <br/>
+   Becaue this container involves local kafka, different than usual production, would recommend this app simply by: <br />
+   `docker compose up`
+
+2. Helm
 
 ## APIs
 
@@ -73,6 +77,28 @@ built-in assertions
 
 ![Swagger](./screenshots/swagger.png)
 
+**Note**:
+Output thumbnail is in webP format, so you need to fetch like this: <br />
+`curl http://127.0.0.1:3000/thumbnails/{{jobId}} --output {{name}}.webp`
+
+## Unit Tests
+
+Run tests by `yarn test` or `npm test`
+
+![Tests](./screenshots/tests.png)
+
 ## Current Trade-offs
 
+1. Due to limitation on local kafka container, this project doesn't include end-to-end tests (purely testing through api calls)
+2. Some post processing or corner cases steps might be left behind
+3. To save local storage size, uploaded orgininal image is cached temporarily, which is going to be deleted after job been processed
+4. Set a size limit on uploaded image, so generated thumbnail saving to database as bytea type is storage effective
+
 ## Future Improvements (Go Production)
+
+1. Use s3 for production storage deploy and use better storage strategy
+2. Duplicated uploaded image detection
+3. Allow user to give self-defined name (like slack)
+4. Add security layer and multi users support
+5. Tighter and solid unit tests
+6. Other strategy to subscribe to kafka queue status instead of W/R database?

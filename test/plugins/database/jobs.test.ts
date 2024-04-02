@@ -69,3 +69,19 @@ test('update job status will return correct job status', async t => {
   t.is(job.id, jobId)
   t.is(job.status, 'success')
 })
+
+test('find job by invalid job id will throw error', async t => {
+  const jobId = randomUUID()
+
+  await t.throwsAsync(async () => {
+    await app.jobsDataSource.getJob(jobId)
+  })
+})
+
+test('update job status with invalid job id will throw error', async t => {
+  const jobId = randomUUID()
+
+  await t.throwsAsync(async () => {
+    await app.jobsDataSource.updateJobStatus(jobId, 'success')
+  })
+})

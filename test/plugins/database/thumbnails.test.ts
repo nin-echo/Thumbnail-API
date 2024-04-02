@@ -71,3 +71,20 @@ test('find thumbnail by job id', async t => {
     t.is(result.metadata instanceof Buffer, true)
   })
 })
+
+test('find thumbnail by job id with non-existent job id', async t => {
+  const jobId = randomUUID()
+
+  await t.throwsAsync(async () => {
+    await app.thumbnailService.findThumbnailByJobId(jobId)
+  })
+})
+
+test('find thumbnail by job id with non-existent thumbnail', async t => {
+  const jobId = randomUUID()
+
+  await t.throwsAsync(async () => {
+    await app.jobsDataSource.createJob(jobId)
+    await app.thumbnailService.findThumbnailByJobId(jobId)
+  })
+})

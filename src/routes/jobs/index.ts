@@ -12,8 +12,14 @@ const jobs: FastifyPluginAsync = async (fastify, _opts) => {
       },
     },
     async function (request, reply) {
-      const job = await fastify.jobsDataSource.getJob(request.params.jobId)
-      reply.status(200).send(job)
+      const { jobId } = request.params
+      try {
+        const job = await fastify.jobsDataSource.getJob(jobId)
+        reply.status(200).send(job)
+      } catch (error) {
+        fastify.log.error(`Error getting job ${jobId}: ${error}`)
+        reply.status(404).send({ message: `Job not found with id ${jobId}` })
+      }
     },
   )
 
@@ -30,8 +36,13 @@ const jobs: FastifyPluginAsync = async (fastify, _opts) => {
       },
     },
     async function (_request, reply) {
-      const allJobs = await fastify.jobsDataSource.getAllJobs()
-      reply.status(200).send(allJobs)
+      try {
+        const allJobs = await fastify.jobsDataSource.getAllJobs()
+        reply.status(200).send(allJobs)
+      } catch (error) {
+        fastify.log.error(`Error getting all jobs: ${error}`)
+        reply.status(500).send({ message: 'Error getting all jobs' })
+      }
     },
   )
 }

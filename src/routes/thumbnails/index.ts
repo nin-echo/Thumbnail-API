@@ -24,10 +24,16 @@ const thumbnails: FastifyPluginAsync = async (fastify, _opts) => {
       },
     },
     async function (request, reply) {
-      const thumbnail = await fastify.thumbnailService.findThumbnailByJobId(request.params.jobId)
-      const thumbnailBuffer = thumbnail.metadata
-      const thumbnailImage = Buffer.from(thumbnailBuffer)
-      reply.status(200).send(thumbnailImage)
+      const { jobId } = request.params
+      try {
+        const thumbnail = await fastify.thumbnailService.findThumbnailByJobId(jobId)
+        const thumbnailBuffer = thumbnail.metadata
+        const thumbnailImage = Buffer.from(thumbnailBuffer)
+        reply.status(200).send(thumbnailImage)
+      } catch (error) {
+        fastify.log.error(`Error getting thumbnail of job ${jobId}: ${error}`)
+        reply.status(404).send({ message: `Thumbnail not found with job id ${jobId}` })
+      }
     },
   )
 
@@ -56,10 +62,15 @@ const thumbnails: FastifyPluginAsync = async (fastify, _opts) => {
     fastify.log.info('File saved to local disk storage: ' + fileName)
 
     const jobId = randomUUID()
-    await fastify.jobsDataSource.createJob(jobId)
-    await fastify.kafKaService.produceThumbnail(jobId, fileName)
+    try {
+      await fastify.jobsDataSource.createJob(jobId)
+      await fastify.kafKaService.produceThumbnail(jobId, fileName)
 
-    await reply.send({ jobId })
+      reply.send({ jobId })
+    } catch (error) {
+      fastify.log.error(`Error generating thumbnail with job ${jobId}: ${error}`)
+      reply.status(500).send({ message: 'Error generating thumbnail' })
+    }
   })
 }
 
