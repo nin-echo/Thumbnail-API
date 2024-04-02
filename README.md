@@ -41,27 +41,27 @@ Kafka is good at:
 
 ### Logger: Pino
 
-excellent performance
-good defaults, with not much extra configuration
-highly customizable
-structured logging in JSON
+- excellent performance
+- good defaults, with not much extra configuration
+- highly customizable
+- structured logging in JSON
 
 ### Unit Testing: AVA
 
-easy to use, install in one line
-parallel test running
-native ES6/7 support
-built-in support for async functions
-automatically ends promise by itself if promise is returned
-offers snapshots
-built-in assertions
+- easy to use, install in one line
+- parallel test running
+- native ES6/7 support
+- built-in support for async functions
+- automatically ends promise by itself if promise is returned
+- offers snapshots
+- built-in assertions
 
 ### Thumbnail storage format: WebP
 
 > WebP lossless images are [26% smaller](https://developers.google.com/speed/webp/docs/webp_lossless_alpha_study#results) in size compared to PNGs. WebP lossy images are [25-34% smaller](https://developers.google.com/speed/webp/docs/webp_study) than comparable JPEG images at equivalent [SSIM](https://en.wikipedia.org/wiki/Structural_similarity) quality index.
 > Lossless WebP **supports transparency** (also known as alpha channel) at a cost of just [22% additional bytes](https://developers.google.com/speed/webp/docs/webp_lossless_alpha_study#results).
 
-\_Referenced from [WebP: # An image format for the Web](https://developers.google.com/speed/webp#:~:text=WebP%20lossless%20images%20are%2026,of%20just%2022%25%20additional%20bytes.)
+Referenced from [WebP: # An image format for the Web](https://developers.google.com/speed/webp#:~:text=WebP%20lossless%20images%20are%2026,of%20just%2022%25%20additional%20bytes.)
 
 ## Install Instructions
 
