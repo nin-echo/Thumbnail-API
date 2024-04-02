@@ -69,7 +69,9 @@ Referenced from [WebP: # An image format for the Web](https://developers.google.
    Becaue this container involves local kafka, different than usual production, would recommend this app simply by: <br />
    `docker compose up`
 
-2. Helm
+2. Helm <br />
+   Use `thumbnail-api-chart-0.1.0.tgz` <br />
+   _The kafka docker image used in this project might NOT be compatitable with kubernetes manifests_
 
 ## APIs
 
@@ -77,9 +79,35 @@ Referenced from [WebP: # An image format for the Web](https://developers.google.
 
 ![Swagger](./screenshots/swagger.png)
 
+**Preview**:
+
+1. `thumbnails/upload`
+   ![upload](./screenshots/upload.png)
+
+2. `jobs/{{id}}`
+   ![job_id](./screenshots/get_job.png)
+
+3. `jobs/`
+   ![jobs](./screenshots/list_job.png)
+
 **Note**:
 Output thumbnail is in webP format, so you need to fetch like this: <br />
 `curl http://127.0.0.1:3000/thumbnails/{{jobId}} --output {{name}}.webp`
+
+**Error message examples**
+
+1. `invalid job`
+   ![invalid_job](./screenshots/invalid_job.png)
+
+2. `invalid thumbnail`
+   ![invalid_thumbnail](./screenshots/invalid_thumbnail.png)
+
+## Logger Preview
+
+**Includes libraries debug info, plus extra manually involved warning and error messages**
+<br />
+<br />
+![logger](./screenshots/logger.png)
 
 ## Unit Tests
 
