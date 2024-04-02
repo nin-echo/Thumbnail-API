@@ -131,3 +131,6 @@ dist
 
 # temporary files which can be created if in a process
 tmp
+
+# .DS_STORE
+.DS_STORE
