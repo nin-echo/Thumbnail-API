@@ -41,6 +41,7 @@ export default fp<KafkaPluginOptions>((fastify, opts, done) => {
               fastify.log.info('[Kafka] Thumbnail generated and saved to database')
             }
           } catch (error) {
+            await fastify.jobsDataSource.updateJobStatus(jobId, 'failed')
             fastify.log.error('[Kafka] Failed to generate thumbnail' + error)
           }
         }
