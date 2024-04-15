@@ -63,11 +63,33 @@ Kafka is good at:
 
 Referenced from [WebP: # An image format for the Web](https://developers.google.com/speed/webp#:~:text=WebP%20lossless%20images%20are%2026,of%20just%2022%25%20additional%20bytes.)
 
+## Local Debug
+
+1. Run Docker (for kafka, postgreSQL running) <br />
+   `docker-compose up -d`
+
+2. Dev Script
+
+```
+# yarn
+yarn dev
+
+#npm
+npm run dev
+```
+
 ## Install Instructions
 
 1. Docker (**Recommend**) <br/>
    Becaue this container involves local kafka, different than usual production, would recommend this app simply by: <br />
-   `docker compose up`
+
+   ```
+   # yarn
+   yarn docker:build
+
+   #npm
+   npm run docker:build
+   ```
 
 2. Helm <br />
    Use `thumbnail-api-chart-0.1.0.tgz` <br />
