@@ -6,5 +6,5 @@ RUN npm install
 RUN npm install --cpu=x64 --os=darwin sharp
 RUN npm install --cpu=arm64 --os=darwin sharp
 COPY . .
-EXPOSE 3000
+EXPOSE 8080
 CMD [ "npm", "start"]

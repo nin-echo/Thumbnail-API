@@ -114,7 +114,7 @@ npm run dev
 
 **Note**:
 Output thumbnail is in webP format, so you need to fetch like this: <br />
-`curl http://127.0.0.1:3000/thumbnails/{{jobId}} --output {{name}}.webp`
+`curl http://127.0.0.1:8080/thumbnails/{{jobId}} --output {{name}}.webp`
 
 **Error message examples**
 

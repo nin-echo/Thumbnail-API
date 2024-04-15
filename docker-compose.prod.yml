@@ -15,4 +15,4 @@ services:
       - DATABASE_URL=postgres://postgres:password@db:5432/postgres
       - KAFKA_BROKERS=kafka1:19092
     ports:
-      - 3000:3000
+      - 8080:8080
